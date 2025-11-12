@@ -1,0 +1,740 @@
+﻿# Duhitri Jewellery Website - Complete Code
+
+Save this code as `index.html` and upload to Netlify or any web hosting service.
+
+---
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duhitri Jewellery - Exquisite Handcrafted Jewelry</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        :root {
+            --color-cream-50: rgba(252, 252, 249, 1);
+            --color-cream-100: rgba(255, 255, 253, 1);
+            --color-slate-900: rgba(19, 52, 59, 1);
+            --color-slate-500: rgba(98, 108, 113, 1);
+            --color-teal-500: rgba(33, 128, 141, 1);
+            --color-teal-600: rgba(29, 116, 128, 1);
+            --color-brown-600-rgb: 94, 82, 64;
+            --color-teal-500-rgb: 33, 128, 141;
+            --color-charcoal-700: rgba(31, 33, 33, 1);
+            --color-charcoal-800: rgba(38, 40, 40, 1);
+            --color-gray-200: rgba(245, 245, 245, 1);
+            --color-gray-300: rgba(167, 169, 169, 1);
+            --color-gray-400: rgba(119, 124, 124, 1);
+            --color-teal-300: rgba(50, 184, 198, 1);
+            --color-red-500: rgba(192, 21, 47, 1);
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-cream-50: var(--color-charcoal-700);
+                --color-cream-100: var(--color-charcoal-800);
+                --color-slate-900: var(--color-gray-200);
+                --color-slate-500: rgba(167, 169, 169, 0.7);
+                --color-teal-500: var(--color-teal-300);
+                --color-teal-600: rgba(50, 184, 198, 1);
+                --color-brown-600-rgb: 119, 124, 124;
+            }
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: var(--color-cream-50);
+            color: var(--color-slate-900);
+            line-height: 1.6;
+        }
+
+        header {
+            background: var(--color-cream-100);
+            border-bottom: 1px solid rgba(var(--color-brown-600-rgb), 0.2);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--color-teal-500);
+            letter-spacing: -0.02em;
+        }
+
+        .cart-icon {
+            background: var(--color-teal-500);
+            color: var(--color-cream-100);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.2s;
+        }
+
+        .cart-icon:hover {
+            background: var(--color-teal-600);
+        }
+
+        .cart-count {
+            background: rgba(255, 255, 255, 0.3);
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+        }
+
+        .hero {
+            background: linear-gradient(135deg, rgba(var(--color-teal-500-rgb), 0.1), rgba(var(--color-brown-600-rgb), 0.08));
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--color-slate-900);
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--color-slate-500);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .filters {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .filter-group label {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--color-slate-500);
+        }
+
+        select {
+            padding: 8px 32px 8px 12px;
+            border: 1px solid rgba(var(--color-brown-600-rgb), 0.2);
+            border-radius: 8px;
+            background: var(--color-cream-100);
+            color: var(--color-slate-900);
+            font-size: 0.95rem;
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23134252' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 16px;
+        }
+
+        select:focus {
+            outline: 2px solid var(--color-teal-500);
+            border-color: var(--color-teal-500);
+        }
+
+        .products {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .product-card {
+            background: var(--color-cream-100);
+            border: 1px solid rgba(var(--color-brown-600-rgb), 0.12);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+            background: rgba(var(--color-teal-500-rgb), 0.05);
+        }
+
+        .product-info {
+            padding: 20px;
+        }
+
+        .product-category {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--color-teal-500);
+            font-weight: 600;
+            letter-spacing: 0.05em;
+            margin-bottom: 8px;
+        }
+
+        .product-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--color-slate-900);
+        }
+
+        .product-description {
+            font-size: 0.9rem;
+            color: var(--color-slate-500);
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+
+        .product-price {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--color-slate-900);
+            margin-bottom: 15px;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            padding: 12px;
+            background: var(--color-teal-500);
+            color: var(--color-cream-100);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .add-to-cart:hover {
+            background: var(--color-teal-600);
+        }
+
+        .add-to-cart:active {
+            transform: scale(0.98);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--color-cream-100);
+            border-radius: 16px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(var(--color-brown-600-rgb), 0.12);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            font-size: 1.5rem;
+            color: var(--color-slate-900);
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--color-slate-500);
+            padding: 5px;
+            line-height: 1;
+        }
+
+        .cart-items {
+            padding: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(var(--color-brown-600-rgb), 0.1);
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: rgba(var(--color-teal-500-rgb), 0.05);
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-weight: 600;
+            color: var(--color-slate-900);
+            margin-bottom: 5px;
+        }
+
+        .cart-item-price {
+            color: var(--color-teal-500);
+            font-weight: 600;
+        }
+
+        .remove-item {
+            background: none;
+            border: none;
+            color: var(--color-red-500);
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: underline;
+            padding: 5px 0;
+        }
+
+        .cart-total {
+            padding: 20px;
+            border-top: 2px solid rgba(var(--color-brown-600-rgb), 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .empty-cart {
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--color-slate-500);
+        }
+
+        .checkout-btn {
+            width: 100%;
+            padding: 15px;
+            background: var(--color-teal-500);
+            color: var(--color-cream-100);
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .checkout-btn:hover {
+            background: var(--color-teal-600);
+        }
+
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .products {
+                grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            }
+
+            .filters {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="logo">Duhitri</div>
+            <button class="cart-icon" onclick="openCart()">
+                🛒 Cart <span class="cart-count" id="cartCount">0</span>
+            </button>
+        </div>
+    </header>
+
+    <section class="hero">
+        <h1>Exquisite Handcrafted Jewellery</h1>
+        <p>Discover our curated collection of fine jewelry pieces, crafted with passion and precision</p>
+    </section>
+
+    <section class="filters">
+        <div class="filter-group">
+            <label for="categoryFilter">Category</label>
+            <select id="categoryFilter" onchange="filterProducts()">
+                <option value="all">All Categories</option>
+                <option value="necklaces">Necklaces</option>
+                <option value="earrings">Earrings</option>
+                <option value="rings">Rings</option>
+                <option value="bracelets">Bracelets</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="materialFilter">Material</label>
+            <select id="materialFilter" onchange="filterProducts()">
+                <option value="all">All Materials</option>
+                <option value="gold">Gold</option>
+                <option value="silver">Silver</option>
+                <option value="platinum">Platinum</option>
+            </select>
+        </div>
+        <div class="filter-group">
+            <label for="priceFilter">Price Range</label>
+            <select id="priceFilter" onchange="filterProducts()">
+                <option value="all">All Prices</option>
+                <option value="low">Under ₹10,000</option>
+                <option value="medium">₹10,000 - ₹50,000</option>
+                <option value="high">Above ₹50,000</option>
+            </select>
+        </div>
+    </section>
+
+    <section class="products" id="productsContainer"></section>
+
+    <div class="modal" id="cartModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Shopping Cart</h2>
+                <button class="close-modal" onclick="closeCart()">&times;</button>
+            </div>
+            <div class="cart-items" id="cartItems"></div>
+            <div class="cart-total" id="cartTotal" style="display: none;">
+                <span>Total:</span>
+                <span id="totalAmount">₹0</span>
+            </div>
+            <div style="padding: 0 20px 20px;" id="checkoutSection" style="display: none;">
+                <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const products = [
+            {
+                id: 1,
+                name: "Elegant Pearl Necklace",
+                category: "necklaces",
+                material: "gold",
+                price: 35000,
+                description: "18K gold necklace adorned with freshwater pearls",
+                image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=400&h=400&fit=crop"
+            },
+            {
+                id: 2,
+                name: "Diamond Stud Earrings",
+                category: "earrings",
+                material: "platinum",
+                price: 65000,
+                description: "Classic platinum studs with brilliant cut diamonds",
+                image: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?w=400&h=400&fit=crop"
+            },
+            {
+                id: 3,
+                name: "Traditional Kundan Ring",
+                category: "rings",
+                material: "gold",
+                price: 28000,
+                description: "Handcrafted kundan ring with intricate detailing",
+                image: "https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400&h=400&fit=crop"
+            },
+            {
+                id: 4,
+                name: "Silver Filigree Bracelet",
+                category: "bracelets",
+                material: "silver",
+                price: 8500,
+                description: "Delicate filigree work on sterling silver",
+                image: "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?w=400&h=400&fit=crop"
+            },
+            {
+                id: 5,
+                name: "Emerald Drop Earrings",
+                category: "earrings",
+                material: "gold",
+                price: 55000,
+                description: "22K gold earrings with natural emerald stones",
+                image: "https://images.unsplash.com/photo-1596944924616-7b38e7cfac36?w=400&h=400&fit=crop"
+            },
+            {
+                id: 6,
+                name: "Contemporary Chain Necklace",
+                category: "necklaces",
+                material: "silver",
+                price: 12000,
+                description: "Modern design with oxidized silver finish",
+                image: "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=400&h=400&fit=crop"
+            },
+            {
+                id: 7,
+                name: "Ruby Cocktail Ring",
+                category: "rings",
+                material: "platinum",
+                price: 85000,
+                description: "Statement ring featuring Burmese ruby",
+                image: "https://images.unsplash.com/photo-1603561596112-0a132b757442?w=400&h=400&fit=crop"
+            },
+            {
+                id: 8,
+                name: "Gold Bangle Set",
+                category: "bracelets",
+                material: "gold",
+                price: 45000,
+                description: "Set of 2 traditional gold bangles with enamel work",
+                image: "https://images.unsplash.com/photo-1611652022419-a9419f74343a?w=400&h=400&fit=crop"
+            }
+        ];
+
+        let cart = [];
+
+        function renderProducts(productsToRender) {
+            const container = document.getElementById('productsContainer');
+            container.innerHTML = productsToRender.map(product => `
+                <div class="product-card">
+                    <img src="${product.image}" alt="${product.name}" class="product-image">
+                    <div class="product-info">
+                        <div class="product-category">${product.category}</div>
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-description">${product.description}</div>
+                        <div class="product-price">₹${product.price.toLocaleString('en-IN')}</div>
+                        <button class="add-to-cart" onclick="addToCart(${product.id})">Add to Cart</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterProducts() {
+            const category = document.getElementById('categoryFilter').value;
+            const material = document.getElementById('materialFilter').value;
+            const priceRange = document.getElementById('priceFilter').value;
+
+            let filtered = products.filter(product => {
+                const categoryMatch = category === 'all' || product.category === category;
+                const materialMatch = material === 'all' || product.material === material;
+                
+                let priceMatch = true;
+                if (priceRange === 'low') priceMatch = product.price < 10000;
+                else if (priceRange === 'medium') priceMatch = product.price >= 10000 && product.price <= 50000;
+                else if (priceRange === 'high') priceMatch = product.price > 50000;
+
+                return categoryMatch && materialMatch && priceMatch;
+            });
+
+            renderProducts(filtered);
+        }
+
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ ...product, quantity: 1 });
+            }
+
+            updateCartCount();
+            renderCart();
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCartCount();
+            renderCart();
+        }
+
+        function updateCartCount() {
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cartCount').textContent = count;
+        }
+
+        function renderCart() {
+            const cartItemsContainer = document.getElementById('cartItems');
+            const totalSection = document.getElementById('cartTotal');
+            const checkoutSection = document.getElementById('checkoutSection');
+
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<div class="empty-cart">Your cart is empty</div>';
+                totalSection.style.display = 'none';
+                checkoutSection.style.display = 'none';
+                return;
+            }
+
+            cartItemsContainer.innerHTML = cart.map(item => `
+                <div class="cart-item">
+                    <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                    <div class="cart-item-details">
+                        <div class="cart-item-name">${item.name}</div>
+                        <div class="cart-item-price">₹${item.price.toLocaleString('en-IN')} × ${item.quantity}</div>
+                        <button class="remove-item" onclick="removeFromCart(${item.id})">Remove</button>
+                    </div>
+                </div>
+            `).join('');
+
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            document.getElementById('totalAmount').textContent = `₹${total.toLocaleString('en-IN')}`;
+            totalSection.style.display = 'flex';
+            checkoutSection.style.display = 'block';
+        }
+
+        function openCart() {
+            document.getElementById('cartModal').classList.add('active');
+            renderCart();
+        }
+
+        function closeCart() {
+            document.getElementById('cartModal').classList.remove('active');
+        }
+
+        function checkout() {
+            if (cart.length === 0) return;
+            
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            // Razorpay payment options
+            const options = {
+                key: "rzp_test_YOUR_KEY_ID", // Replace with your Razorpay Test Key ID
+                amount: total * 100, // Amount in paise (multiply by 100)
+                currency: "INR",
+                name: "Duhitri Jewellery",
+                description: "Handcrafted Jewelry Purchase",
+                image: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?w=100&h=100&fit=crop",
+                handler: function (response) {
+                    // Payment successful
+                    alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}\n\nThank you for your order! We will contact you shortly for delivery.`);
+                    cart = [];
+                    updateCartCount();
+                    closeCart();
+                },
+                prefill: {
+                    name: "",
+                    email: "",
+                    contact: ""
+                },
+                notes: {
+                    address: "Duhitri Jewellery Store"
+                },
+                theme: {
+                    color: "#218D8D"
+                },
+                modal: {
+                    ondismiss: function() {
+                        alert('Payment cancelled. Your cart items are saved.');
+                    }
+                }
+            };
+            
+            const rzp = new Razorpay(options);
+            rzp.on('payment.failed', function (response) {
+                alert(`Payment failed: ${response.error.description}`);
+            });
+            rzp.open();
+        }
+
+        // Initialize
+        renderProducts(products);
+    </script>
+</body>
+</html>
+```
+
+---
+
+## Quick Setup Instructions
+
+### Step 1: Save the File
+1. Copy ALL the HTML code above (everything inside the code block)
+2. Open a text editor (Notepad on Windows, TextEdit on Mac, or any code editor)
+3. Paste the code
+4. Save as: `index.html` (Make sure to save with `.html` extension, not `.txt`)
+
+### Step 2: Deploy to Netlify (FREE)
+1. Go to https://www.netlify.com
+2. Sign up with email or Google
+3. Click "Sites" → Drag and drop your `index.html` file
+4. Get your live URL instantly! (e.g., `yoursite.netlify.app`)
+
+### Step 3: Update Razorpay Key (Before Accepting Real Payments)
+1. Sign up at https://razorpay.com
+2. Complete KYC verification
+3. Go to Settings → API Keys
+4. Copy your Test Key ID
+5. In the HTML file, find line with: `key: "rzp_test_YOUR_KEY_ID"`
+6. Replace `YOUR_KEY_ID` with your actual key
+7. Re-upload to Netlify
+
+### Step 4: Customize Products
+Edit the `products` array in the JavaScript section to add your own jewelry items with:
+- Product names
+- Prices
+- Descriptions  
+- Categories
+- Your own product image URLs
+
+---
+
+## What's Included
+
+✅ Full e-commerce functionality  
+✅ Shopping cart system  
+✅ Product filters (category, material, price)  
+✅ Razorpay payment integration  
+✅ Mobile responsive design  
+✅ Dark mode support  
+✅ Professional UI with Duhitri branding  
+
+Your Duhitri Jewellery store is ready to go live! 🚀
